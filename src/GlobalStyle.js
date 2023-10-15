@@ -87,39 +87,42 @@ export const GlobalStyle = createGlobalStyle`
     }
 
     #root {
-        margin: 20px;
+        //margin: 20px 0;
     }
 
-    .card {
-        max-width: 50%;
+    .wrapper {
+        max-width: 1700px;
+        width: 100%;
+        padding-left: 20px;
+        padding-right: 20px;
         margin-left: auto;
         margin-right: auto;
     }
 
     .btn {
-    padding: 8px 15px;
-    border-radius: 5px;
+        padding: 8px 15px;
+        border-radius: 5px;
     }
 
     .btn.btn-primary {
-    background-color: var(--colorPrimary);
-    color: var(--white);
-    transition: box-shadow var(--cubic-transition),
+        background-color: var(--colorPrimary);
+        color: var(--white);
+        transition: box-shadow var(--cubic-transition),
         background-color var(--cubic-transition);
     }
 
     .btn.btn-primary:hover {
-    box-shadow: rgba(0, 0, 0, 0.48) 0 4px 12px;
+        box-shadow: rgba(0, 0, 0, 0.48) 0 4px 12px;
     }
 
     .btn.btn-primary:focus {
-    background-color: var(--colorPrimaryDark);
+        background-color: var(--colorPrimaryDark);
     }
 
     .btn.btn-outline {
-    border: 1px solid var(--colorPrimary);
-    color: var(--colorPrimary);
-    transition: box-shadow var(--cubic-transition), border var(--cubic-transition),
+        border: 1px solid var(--colorPrimary);
+        color: var(--colorPrimary);
+        transition: box-shadow var(--cubic-transition), border var(--cubic-transition),
         color var(--cubic-transition);
     }
 

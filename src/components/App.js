@@ -1,94 +1,71 @@
 import React, { Component } from 'react';
-import { nanoid } from 'nanoid';
-import { ContactForm } from './ContactForm/ContactForm';
-import { Filter } from './Filter/Filter';
-import { ContactList } from './ContactList/ContactList';
+import { RevolvingDot } from 'react-loader-spinner';
+//import { nanoid } from 'nanoid';
+import { Searchbar } from './Searchbar/Searchbar';
+import { ImageGallery } from './ImageGallery/ImageGallery';
+import { fetchImages } from 'api';
 
 export class App extends Component {
   state = {
-    contacts: [],
-    filter: '',
+    query: '',
+    page: 1,
+    perPage: 12,
+    imagesItems: [],
+    loading: false,
+    error: false,
+    loadMore: false,
   };
 
-  addContact = newContact => {
-    const { contacts } = this.state;
-    const normalizedName = newContact.name.toLowerCase();
-    let contactName = contacts.some(
-      contact => contact.name.toLowerCase() === normalizedName
-    );
-
-    if (contactName) {
-      alert(`${newContact.name} is already in contacts.`);
-      return;
-    }
-
-    this.setState(prevState => ({
-      contacts: [...prevState.contacts, { ...newContact, id: nanoid() }],
-    }));
-  };
-
-  deleteContact = evt => {
-    const { contacts } = this.state;
-
-    contacts.forEach(element => {
-      if (element.name === evt.target.id) {
-        const del = contacts.indexOf(element);
-        contacts.splice(del, 1);
-        console.log(contacts);
-
-        this.setState({
-          contacts: contacts,
-        });
-      }
-    });
-  };
-
-  onFilter = evt => {
-    let name = evt.target.value;
-    this.setState({ filter: name });
-  };
-
-  getVisibleContacts = () => {
-    const { filter, contacts } = this.state;
-    const normalizedFilter = filter.toLowerCase();
-    return contacts.filter(contact =>
-      contact.name.toLowerCase().includes(normalizedFilter)
-    );
-  };
-
-  componentDidMount() {
-    const savedFilters = localStorage.getItem('contact-item');
-    if (savedFilters !== null) {
+  async componentDidMount() {
+    try {
+      this.setState({ loading: true, error: false });
+      const images = await fetchImages(this.state.page, this.state.perPage);
       this.setState({
-        contacts: JSON.parse(savedFilters),
+        imagesItems: images.hits,
+        loadMore:
+          this.state.page < Math.ceil(images.totalHits / this.state.perPage),
       });
+    } catch (error) {
+      this.setState({ error: true });
+    } finally {
+      this.setState({ loading: false });
     }
   }
 
-  componentDidUpdate(prevState) {
-    if (prevState.filters !== this.state.contacts) {
-      localStorage.setItem('contact-item', JSON.stringify(this.state.contacts));
-    }
-  }
+  handleLoadMore = () => {
+    this.setState(prevState => prevState.page + 1);
+  };
 
   render() {
-    const { filter } = this.state;
-    const visibleContacts = this.getVisibleContacts();
-
+    console.log(this.state.imagesItems);
+    const { imagesItems, loading, error } = this.state;
     return (
-      <div className="card">
-        <h1>Phonebook</h1>
-        <ContactForm onAdd={this.addContact} />
-
-        <h2>Contacts</h2>
-        <Filter inputValue={filter} handleChange={this.onFilter} />
-        {this.state.contacts.length > 0 && (
-          <ContactList
-            contacts={visibleContacts}
-            onDelete={this.deleteContact}
+      <>
+        <Searchbar />
+        {this.state.imagesItems.length > 0 && (
+          <ImageGallery items={imagesItems} />
+        )}
+        {this.state.loading && (
+          <RevolvingDot
+            radius="45"
+            strokeWidth="5"
+            color="red"
+            secondaryColor="green"
+            ariaLabel="revolving-dot-loading"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
           />
         )}
-      </div>
+
+        <button
+          type="button"
+          className="btn btn-outline"
+          onClick={this.handleLoadMore}
+        >
+          Load more
+        </button>
+      </>
     );
   }
 }
