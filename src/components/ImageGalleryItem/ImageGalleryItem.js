@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import { CloseButton } from './ImageGalleryItem.styled';
 import Modal from 'react-modal';
+import { AiOutlineClose } from 'react-icons/ai';
 
 const customStyles = {
   content: {
@@ -9,6 +11,7 @@ const customStyles = {
     bottom: 'auto',
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
+    padding: '30px',
   },
 };
 
@@ -41,15 +44,11 @@ export class ImageGalleryItem extends Component {
           contentLabel="Example Modal"
         >
           <img src={webformatURL} alt={tags} />
-          <button onClick={this.closeModal}>close</button>
+          <CloseButton type="button" onClick={this.closeModal}>
+            <AiOutlineClose />
+          </CloseButton>
         </Modal>
       </>
     );
   }
 }
-
-/*
-export const ImageGalleryItem = ({ webformatURL, tags }) => {
-  return <img src={webformatURL} alt={tags} />;
-};
-*/

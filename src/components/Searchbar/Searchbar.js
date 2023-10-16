@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup';
-import { SearchForm } from './SearchForm.styled';
+import { SearchForm, ErrMessage } from './SearchForm.styled';
+import { AiOutlineSearch } from 'react-icons/ai';
 
 const SignupSchema = Yup.object().shape({
-  search: Yup.string().required('Required'),
+  search: Yup.string().required('This field is empty. Write something'),
 });
 
 export class Searchbar extends Component {
@@ -23,9 +24,6 @@ export class Searchbar extends Component {
           >
             <Form>
               <div className="search-item">
-                <button type="submit" className="button">
-                  <span className="button-label">Search</span>
-                </button>
                 <label htmlFor="search"></label>
                 <Field
                   id="search"
@@ -34,9 +32,11 @@ export class Searchbar extends Component {
                   className="input"
                   type="text"
                   placeholder="Search images and photos"
-                  //value={this.props.inputValue}
-                  //onChange={this.props.handleChange}
                 />
+                <ErrMessage name="search" component="div" />
+                <button type="submit" className="button">
+                  <AiOutlineSearch />
+                </button>
               </div>
             </Form>
           </Formik>

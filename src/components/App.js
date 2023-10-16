@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { RevolvingDot } from 'react-loader-spinner';
-//import { nanoid } from 'nanoid';
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { fetchImages } from 'api';
+import toast, { Toaster } from 'react-hot-toast';
 
 export class App extends Component {
   state = {
@@ -15,28 +15,6 @@ export class App extends Component {
     error: false,
     loadMore: false,
   };
-
-  /*
-  async componentDidMount() {
-    try {
-      this.setState({ loading: true, error: false });
-      const images = await fetchImages(
-        this.state.page,
-        this.state.perPage,
-        this.state.query
-      );
-      this.setState({
-        imagesItems: images.hits,
-        loadMore:
-          this.state.page < Math.ceil(images.totalHits / this.state.perPage),
-      });
-    } catch (error) {
-      this.setState({ error: true });
-    } finally {
-      this.setState({ loading: false });
-    }
-  }
-  */
 
   async componentDidUpdate(prevProps, prevState) {
     if (
@@ -60,13 +38,9 @@ export class App extends Component {
           };
         });
 
-        /*
-        this.setState({
-          imagesItems: images.hits,
-          loadMore:
-            this.state.page < Math.ceil(images.totalHits / this.state.perPage),
-        });
-        */
+        if (images.hits < 1) {
+          toast.error('There are no entries. Try again');
+        }
       } catch (error) {
         this.setState({ error: true });
       } finally {
@@ -76,8 +50,6 @@ export class App extends Component {
   }
 
   handlerSubmit = evt => {
-    //evt.preventDefault();
-    //console.log(evt.search);
     this.setState({
       imagesItems: [],
       query: evt.search,
@@ -106,8 +78,8 @@ export class App extends Component {
           <RevolvingDot
             radius="45"
             strokeWidth="5"
-            color="red"
-            secondaryColor="green"
+            color="#ffd400"
+            secondaryColor="#02c9c9"
             ariaLabel="revolving-dot-loading"
             wrapperStyle={{}}
             wrapperClass=""
@@ -116,14 +88,18 @@ export class App extends Component {
         )}
 
         {this.state.loadMore && (
-          <button
-            type="button"
-            className="btn btn-outline"
-            onClick={this.handleLoadMore}
-          >
-            Load more
-          </button>
+          <div className="wrapper">
+            <button
+              type="button"
+              className="btn btn-outline"
+              onClick={this.handleLoadMore}
+            >
+              Load more
+            </button>
+          </div>
         )}
+
+        <Toaster position="top-right" />
       </>
     );
   }

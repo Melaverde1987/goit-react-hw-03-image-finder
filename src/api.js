@@ -14,6 +14,5 @@ export const fetchImages = async (currentPage, perPage, query) => {
   });
 
   const response = await axios.get(`/?${params}`);
-  //console.log(response.data);
   return response.data;
 };

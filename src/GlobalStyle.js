@@ -71,7 +71,39 @@ export const GlobalStyle = createGlobalStyle`
         text-transform: uppercase;
     }
 
-    input:focus,
+    
+    label {
+        margin-bottom: 5px;
+        color: var(--colorPrimary);
+        font-weight: 600;
+    }
+
+    input {
+        padding: 5px 15px;
+        border-radius: 5px;
+        border: 1px solid var(--black);
+        color: var(--black);
+        font-size: 18px;
+        line-height: 1;
+        border-style: none;
+        outline: none;
+        height: calc(1em + 1.6em + 0.5em);
+        width: 100%;
+        border: 3px solid transparent;
+        background-image: linear-gradient(var(--white), var(--white)),
+        linear-gradient(120deg, #ffd400 0%, #02c9c9 50%, #9f0 100%);
+        background-origin: border-box;
+        background-clip: padding-box, border-box;
+        border-radius: 1.8em;
+        background-size: 200% 100%;
+        transition: background-position 0.8s ease-out;
+    }
+
+    input:hover,
+    input:focus {
+        background-position: 100% 0;
+    }
+
     textarea:focus {
         outline: 1px solid var(--colorPrimary);
     }
@@ -120,19 +152,23 @@ export const GlobalStyle = createGlobalStyle`
     }
 
     .btn.btn-outline {
-        border: 1px solid var(--colorPrimary);
-        color: var(--colorPrimary);
-        transition: box-shadow var(--cubic-transition), border var(--cubic-transition),
-        color var(--cubic-transition);
+        color: var(--black);
+        transition: background-position 0.8s ease-out;
+        border: 3px solid transparent;
+        background-image: linear-gradient(var(--white), var(--white)),
+        linear-gradient(120deg, #ffd400 0%, #02c9c9 50%, #9f0 100%);
+        background-origin: border-box;
+        background-clip: padding-box, border-box;
+        border-radius: 1.8em;
+        background-size: 200% 100%;
     }
 
     .btn.btn-outline:hover {
-        box-shadow: rgba(0, 0, 0, 0.48) 0 4px 12px;
+        background-position: 100% 0;
     }
 
     .btn.btn-outline:focus {
-        border: 1px solid var(--colorPrimaryDark);
-        color: var(--colorPrimaryDark);
+        background-position: 100% 0;
     }
 
 
@@ -140,18 +176,6 @@ export const GlobalStyle = createGlobalStyle`
         display: flex;
         flex-direction: column;
         margin-bottom: 10px;
-    }
-
-    label {
-        margin-bottom: 5px;
-        color: var(--colorPrimary);
-        font-weight: 600;
-    }
-
-    input {
-        padding: 5px 10px;
-        border-radius: 5px;
-        border: 1px solid var(--black);
     }
 
     :root {
