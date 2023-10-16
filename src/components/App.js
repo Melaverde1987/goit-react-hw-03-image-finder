@@ -16,10 +16,15 @@ export class App extends Component {
     loadMore: false,
   };
 
+  /*
   async componentDidMount() {
     try {
       this.setState({ loading: true, error: false });
-      const images = await fetchImages(this.state.page, this.state.perPage);
+      const images = await fetchImages(
+        this.state.page,
+        this.state.perPage,
+        this.state.query
+      );
       this.setState({
         imagesItems: images.hits,
         loadMore:
@@ -31,17 +36,69 @@ export class App extends Component {
       this.setState({ loading: false });
     }
   }
+  */
+
+  async componentDidUpdate(prevProps, prevState) {
+    if (
+      prevState.query !== this.state.query ||
+      prevState.page !== this.state.page
+    ) {
+      try {
+        this.setState({ loading: true, error: false });
+        const images = await fetchImages(
+          this.state.page,
+          this.state.perPage,
+          this.state.query
+        );
+
+        this.setState(prevState => {
+          return {
+            imagesItems: [...prevState.imagesItems, ...images.hits],
+            loadMore:
+              this.state.page <
+              Math.ceil(images.totalHits / this.state.perPage),
+          };
+        });
+
+        /*
+        this.setState({
+          imagesItems: images.hits,
+          loadMore:
+            this.state.page < Math.ceil(images.totalHits / this.state.perPage),
+        });
+        */
+      } catch (error) {
+        this.setState({ error: true });
+      } finally {
+        this.setState({ loading: false });
+      }
+    }
+  }
+
+  handlerSubmit = evt => {
+    //evt.preventDefault();
+    //console.log(evt.search);
+    this.setState({
+      imagesItems: [],
+      query: evt.search,
+      page: 1,
+    });
+  };
 
   handleLoadMore = () => {
-    this.setState(prevState => prevState.page + 1);
+    this.setState(prevState => {
+      return {
+        page: prevState.page + 1,
+      };
+    });
   };
 
   render() {
-    console.log(this.state.imagesItems);
-    const { imagesItems, loading, error } = this.state;
+    console.log(this.state);
+    const { imagesItems } = this.state;
     return (
       <>
-        <Searchbar />
+        <Searchbar onSubmit={this.handlerSubmit} />
         {this.state.imagesItems.length > 0 && (
           <ImageGallery items={imagesItems} />
         )}
@@ -58,13 +115,15 @@ export class App extends Component {
           />
         )}
 
-        <button
-          type="button"
-          className="btn btn-outline"
-          onClick={this.handleLoadMore}
-        >
-          Load more
-        </button>
+        {this.state.loadMore && (
+          <button
+            type="button"
+            className="btn btn-outline"
+            onClick={this.handleLoadMore}
+          >
+            Load more
+          </button>
+        )}
       </>
     );
   }

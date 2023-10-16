@@ -18,11 +18,14 @@ export class Searchbar extends Component {
             }}
             validationSchema={SignupSchema}
             onSubmit={(values, actions) => {
-              console.log(values);
+              this.props.onSubmit(values);
             }}
           >
             <Form>
               <div className="search-item">
+                <button type="submit" className="button">
+                  <span className="button-label">Search</span>
+                </button>
                 <label htmlFor="search"></label>
                 <Field
                   id="search"
@@ -34,9 +37,6 @@ export class Searchbar extends Component {
                   //value={this.props.inputValue}
                   //onChange={this.props.handleChange}
                 />
-                <button type="submit" className="button">
-                  <span className="button-label">Search</span>
-                </button>
               </div>
             </Form>
           </Formik>
