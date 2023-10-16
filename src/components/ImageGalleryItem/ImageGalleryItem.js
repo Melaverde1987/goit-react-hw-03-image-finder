@@ -40,7 +40,7 @@ export class ImageGalleryItem extends Component {
           style={customStyles}
           contentLabel="Example Modal"
         >
-          <img src={webformatURL} />
+          <img src={webformatURL} alt={tags} />
           <button onClick={this.closeModal}>close</button>
         </Modal>
       </>
